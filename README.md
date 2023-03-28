@@ -1,0 +1,1 @@
+A datepicker component made using Vite, React and TypeScript
