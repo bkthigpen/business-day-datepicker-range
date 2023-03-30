@@ -2,12 +2,10 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import {
   buildCalendar,
-  checkIfWeekend,
   currentYearMonthDays,
-  // daysInMonth,
+  dateDetails,
   dayOfWeekMap,
   firstDayOfTheWeek,
-  isWeekend,
   maxCalendarRange,
   month,
   monthMap,
@@ -23,6 +21,7 @@ function Calendar() {
   // current state of the calendar
   const [calendarMonth, setCalendarMonth] = useState<number>(month);
   const [calendarYear, setCalendarYear] = useState<number>(year);
+  const [selectedDates, setSelectedDates] = useState<string[]>([]);
 
   const calendarYearMonthDays = currentYearMonthDays(
     calendarYear,
@@ -57,6 +56,10 @@ function Calendar() {
     }
   };
 
+  const handleDayButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setSelectedDates([...selectedDates, event.currentTarget.value]);
+  };
+
   const calendar = buildCalendar(
     maxCalendarRange,
     calendarYearMonthDays.days,
@@ -81,7 +84,11 @@ function Calendar() {
       </div>
       <div className="grid grid-cols-7 gap-4 bg-white rounded shadow-lg p-4">
         {calendar.map((cal, i) => {
-          const currentlyWeekend = checkIfWeekend(
+          const {
+            date,
+            isCurrentMonth,
+            isWeekend: isWeekendVar,
+          } = dateDetails(
             calendarPrevYearMonthDays,
             calendarYearMonthDays,
             calendarNextYearMonthDays,
@@ -90,7 +97,13 @@ function Calendar() {
             firstDayWeek
           );
           return (
-            <DayButton key={uuidv4()} day={cal} disabled={currentlyWeekend} />
+            <DayButton
+              key={uuidv4()}
+              day={cal}
+              inactive={isWeekendVar || !isCurrentMonth}
+              onClick={handleDayButtonClick}
+              value={date}
+            />
           );
         })}
       </div>
@@ -101,6 +114,7 @@ function Calendar() {
       calendarNextYearMonthDays - {JSON.stringify(calendarNextYearMonthDays)}
       <br />
       firstDayWeek - {firstDayWeek} */}
+      Selected Dates - {selectedDates}
     </div>
   );
 }

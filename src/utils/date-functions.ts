@@ -4,6 +4,12 @@ type PrevMonthAndYearType = {
   days: number;
 };
 
+type DateDetailsType = {
+  date: string;
+  isCurrentMonth: boolean;
+  isWeekend: boolean;
+};
+
 export const month: number = new Date().getMonth();
 export const year: number = new Date().getFullYear();
 export const day: number = new Date().getDate();
@@ -103,26 +109,38 @@ export const buildCalendar = (
   return array;
 };
 
-export const checkIfWeekend = (
+export const dateDetails = (
   prevObj: PrevMonthAndYearType,
   currObj: PrevMonthAndYearType,
   nextObj: PrevMonthAndYearType,
   count: number,
   index: number,
   firstDayWeek: number
-): boolean => {
+): DateDetailsType => {
   if (index < firstDayWeek) {
     const dateObject = new Date(prevObj.year, prevObj.month, count);
-    return isWeekend(dateObject);
+    return {
+      date: dateObject.toDateString(),
+      isCurrentMonth: false,
+      isWeekend: isWeekend(dateObject),
+    };
   }
 
   if (index >= currObj.days + firstDayWeek) {
     const dateObject = new Date(nextObj.year, nextObj.month, count);
-    return isWeekend(dateObject);
+    return {
+      date: dateObject.toDateString(),
+      isCurrentMonth: false,
+      isWeekend: isWeekend(dateObject),
+    };
   }
 
   const dateObject = new Date(currObj.year, currObj.month, count);
-  return isWeekend(dateObject);
+  return {
+    date: dateObject.toDateString(),
+    isCurrentMonth: true,
+    isWeekend: isWeekend(dateObject),
+  };
 };
 
 export const monthMap: { [type: number]: string } = {
