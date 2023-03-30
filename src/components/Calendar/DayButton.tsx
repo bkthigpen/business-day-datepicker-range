@@ -8,9 +8,10 @@ export type DayBlockProps = {
 
 function DayBlock({ day, disabled = false, inactive = false }: DayBlockProps) {
   const classList = buildClassList(
-    'text-center p-4 bg-red-500',
-    inactive && 'bg-blue-500',
-    disabled && 'bg-gray-400'
+    'p-4',
+    disabled && 'text-slate-300'
+    // inactive && 'bg-blue-500',
+    // disabled && 'bg-gray-400'
   );
   return (
     <button type="button" className={classList} disabled={disabled}>

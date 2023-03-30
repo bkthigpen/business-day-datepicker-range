@@ -1,21 +1,43 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import {
-  daysInMonth,
+  buildCalendar,
+  checkIfWeekend,
+  currentYearMonthDays,
+  // daysInMonth,
   dayOfWeekMap,
+  firstDayOfTheWeek,
+  isWeekend,
   maxCalendarRange,
   month,
   monthMap,
+  nextYearMonthDays,
+  prevYearMonthDays,
   year,
 } from 'utils/date-functions';
 
+import DayButton from './DayButton';
 import DateNav from './DateNav';
 
 function Calendar() {
   // current state of the calendar
   const [calendarMonth, setCalendarMonth] = useState<number>(month);
   const [calendarYear, setCalendarYear] = useState<number>(year);
-  const calendarDaysInMonth = daysInMonth(calendarYear, calendarMonth);
+
+  const calendarYearMonthDays = currentYearMonthDays(
+    calendarYear,
+    calendarMonth
+  );
+  const calendarPrevYearMonthDays = prevYearMonthDays(
+    calendarYear,
+    calendarMonth
+  );
+  const calendarNextYearMonthDays = nextYearMonthDays(
+    calendarYear,
+    calendarMonth
+  );
+
+  const firstDayWeek = firstDayOfTheWeek(calendarYear, calendarMonth);
 
   const handlePrevState = (): void => {
     if (calendarMonth === 0) {
@@ -35,6 +57,13 @@ function Calendar() {
     }
   };
 
+  const calendar = buildCalendar(
+    maxCalendarRange,
+    calendarYearMonthDays.days,
+    calendarPrevYearMonthDays.days,
+    firstDayWeek
+  );
+
   return (
     <div className="overflow-hidden p-4">
       <DateNav
@@ -51,11 +80,27 @@ function Calendar() {
         ))}
       </div>
       <div className="grid grid-cols-7 gap-4 bg-white rounded shadow-lg p-4">
-        {[...Array(maxCalendarRange)].map((_, i) => {
-          return <div key={uuidv4()}>{i}</div>;
+        {calendar.map((cal, i) => {
+          const currentlyWeekend = checkIfWeekend(
+            calendarPrevYearMonthDays,
+            calendarYearMonthDays,
+            calendarNextYearMonthDays,
+            cal,
+            i,
+            firstDayWeek
+          );
+          return (
+            <DayButton key={uuidv4()} day={cal} disabled={currentlyWeekend} />
+          );
         })}
       </div>
-      Calendar Days in Month - {calendarDaysInMonth}
+      {/* calendarYearMonthDays - {JSON.stringify(calendarYearMonthDays)}
+      <br />
+      calendarPrevYearMonthDays - {JSON.stringify(calendarPrevYearMonthDays)}
+      <br />
+      calendarNextYearMonthDays - {JSON.stringify(calendarNextYearMonthDays)}
+      <br />
+      firstDayWeek - {firstDayWeek} */}
     </div>
   );
 }
