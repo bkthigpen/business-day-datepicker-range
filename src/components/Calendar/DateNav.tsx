@@ -30,6 +30,7 @@ function DateNav({
       >
         {'<'}
       </button>
+      {/* Componentize Select Dropdown */}
       <div className="text-xl">
         <select value={month} onChange={onMonthChange}>
           {Object.entries(monthDropdown).map(([key, value]) => {
