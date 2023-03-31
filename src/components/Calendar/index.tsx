@@ -7,6 +7,7 @@ import {
   datesInRange,
   dayOfWeekMap,
   firstDayOfTheWeek,
+  isWeekend,
   maxCalendarRange,
   month,
   monthMap,
@@ -25,7 +26,9 @@ function Calendar() {
 
   const [selectedStartDate, setSelectedStartDate] = useState<string>('');
   const [dateSelectCount, setDateSelectCount] = useState<number>(0);
-  const [selectedDateRange, setSelectedDateRange] = useState<string[]>([]);
+
+  const [weekdayRange, setWeekdayRange] = useState<string[]>([]);
+  const [weekendRange, setWeekendRange] = useState<string[]>([]);
 
   const calendarYearMonthDays = currentYearMonthDays(
     calendarYear,
@@ -77,14 +80,25 @@ function Calendar() {
         (a, b) => a.valueOf() - b.valueOf()
       );
 
-      const dateRanges = datesInRange(orderDates[0], orderDates[1]).map(
-        (date) => date.toLocaleDateString()
-      );
+      datesInRange(orderDates[0], orderDates[1]).forEach((date) => {
+        if (isWeekend(date)) {
+          setWeekendRange((prevState) => [
+            ...prevState,
+            date.toLocaleDateString(),
+          ]);
+        } else {
+          setWeekdayRange((prevState) => [
+            ...prevState,
+            date.toLocaleDateString(),
+          ]);
+        }
+      });
+
       setDateSelectCount(dateSelectCount + 1);
-      setSelectedDateRange(dateRanges);
     } else {
       setSelectedStartDate(event.currentTarget.value);
-      setSelectedDateRange([]);
+      setWeekdayRange([]);
+      setWeekendRange([]);
       setDateSelectCount(1);
     }
   };
@@ -133,7 +147,7 @@ function Calendar() {
               key={uuidv4()}
               active={
                 dateToLocaleDateString === selectedStartDate ||
-                selectedDateRange.includes(dateToLocaleDateString)
+                weekdayRange.includes(dateToLocaleDateString)
               }
               day={cal}
               disabled={isWeekendVar}
@@ -144,19 +158,10 @@ function Calendar() {
           );
         })}
       </div>
-      {/* calendarYearMonthDays - {JSON.stringify(calendarYearMonthDays)}
-      <br />
-      calendarPrevYearMonthDays - {JSON.stringify(calendarPrevYearMonthDays)}
-      <br />
-      calendarNextYearMonthDays - {JSON.stringify(calendarNextYearMonthDays)}
-      <br />
-      firstDayWeek - {firstDayWeek} */}
-      {/* Selected Dates - {selectedDates} */}
-      {/* selectedStartDate - {selectedStartDate}
-      <br />
-      selectedEndDate - {selectedEndDate}
-      <br />
-      dateSelectCount - {dateSelectCount} */}
+      <div className="mt-4 p-4 bg-white shadow-lg">
+        <div>WeekdayRange - {JSON.stringify(weekdayRange)}</div>
+        <div>WeekendRange - {JSON.stringify(weekendRange)}</div>
+      </div>
     </div>
   );
 }
