@@ -5,7 +5,7 @@ type PrevMonthAndYearType = {
 };
 
 type DateDetailsType = {
-  date: string;
+  date: Date;
   isCurrentMonth: boolean;
   isWeekend: boolean;
 };
@@ -99,7 +99,6 @@ export const buildCalendar = (
     } else if (i >= currentDaysArg + dayArg) {
       array.push(nextMontCount);
       nextMontCount += 1;
-      // array.push(0);
     } else {
       array.push(currentDaysCount);
       currentDaysCount += 1;
@@ -120,7 +119,7 @@ export const dateDetails = (
   if (index < firstDayWeek) {
     const dateObject = new Date(prevObj.year, prevObj.month, count);
     return {
-      date: dateObject.toDateString(),
+      date: dateObject,
       isCurrentMonth: false,
       isWeekend: isWeekend(dateObject),
     };
@@ -128,8 +127,9 @@ export const dateDetails = (
 
   if (index >= currObj.days + firstDayWeek) {
     const dateObject = new Date(nextObj.year, nextObj.month, count);
+    // console.log('dateObject', dateObject);
     return {
-      date: dateObject.toDateString(),
+      date: dateObject,
       isCurrentMonth: false,
       isWeekend: isWeekend(dateObject),
     };
@@ -137,10 +137,23 @@ export const dateDetails = (
 
   const dateObject = new Date(currObj.year, currObj.month, count);
   return {
-    date: dateObject.toDateString(),
+    date: dateObject,
     isCurrentMonth: true,
     isWeekend: isWeekend(dateObject),
   };
+};
+
+export const datesInRange = (startDate: Date, endDate: Date): Date[] => {
+  const date = new Date(startDate.getTime());
+
+  const dates = [];
+
+  while (date <= endDate) {
+    dates.push(new Date(date));
+    date.setDate(date.getDate() + 1);
+  }
+
+  return dates;
 };
 
 export const monthMap: { [type: number]: string } = {

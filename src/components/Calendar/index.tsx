@@ -4,6 +4,7 @@ import {
   buildCalendar,
   currentYearMonthDays,
   dateDetails,
+  datesInRange,
   dayOfWeekMap,
   firstDayOfTheWeek,
   maxCalendarRange,
@@ -21,7 +22,10 @@ function Calendar() {
   // current state of the calendar
   const [calendarMonth, setCalendarMonth] = useState<number>(month);
   const [calendarYear, setCalendarYear] = useState<number>(year);
-  const [selectedDates, setSelectedDates] = useState<string[]>([]);
+
+  const [selectedStartDate, setSelectedStartDate] = useState<string>('');
+  const [dateSelectCount, setDateSelectCount] = useState<number>(0);
+  const [selectedDateRange, setSelectedDateRange] = useState<string[]>([]);
 
   const calendarYearMonthDays = currentYearMonthDays(
     calendarYear,
@@ -56,8 +60,33 @@ function Calendar() {
     }
   };
 
-  const handleDayButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setSelectedDates([...selectedDates, event.currentTarget.value]);
+  const handleDayButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ): void => {
+    const toDate = new Date(event.currentTarget.value);
+    if (dateSelectCount === 0) {
+      setSelectedStartDate(event.currentTarget.value);
+      setDateSelectCount(dateSelectCount + 1);
+    } else if (dateSelectCount === 1) {
+      const startDate = new Date(selectedStartDate);
+
+      // Fun little TS issue I was not aware of about sorting dates
+      // checking the valueOf in the sort return argument fixes it
+      // https://stackoverflow.com/a/60688789
+      const orderDates = [startDate, toDate].sort(
+        (a, b) => a.valueOf() - b.valueOf()
+      );
+
+      const dateRanges = datesInRange(orderDates[0], orderDates[1]).map(
+        (date) => date.toLocaleDateString()
+      );
+      setDateSelectCount(dateSelectCount + 1);
+      setSelectedDateRange(dateRanges);
+    } else {
+      setSelectedStartDate(event.currentTarget.value);
+      setSelectedDateRange([]);
+      setDateSelectCount(1);
+    }
   };
 
   const calendar = buildCalendar(
@@ -96,13 +125,21 @@ function Calendar() {
             i,
             firstDayWeek
           );
+
+          const dateToLocaleDateString = date.toLocaleDateString();
+
           return (
             <DayButton
               key={uuidv4()}
+              active={
+                dateToLocaleDateString === selectedStartDate ||
+                selectedDateRange.includes(dateToLocaleDateString)
+              }
               day={cal}
-              inactive={isWeekendVar || !isCurrentMonth}
+              disabled={isWeekendVar}
+              inactive={!isCurrentMonth}
               onClick={handleDayButtonClick}
-              value={date}
+              value={dateToLocaleDateString}
             />
           );
         })}
@@ -114,7 +151,12 @@ function Calendar() {
       calendarNextYearMonthDays - {JSON.stringify(calendarNextYearMonthDays)}
       <br />
       firstDayWeek - {firstDayWeek} */}
-      Selected Dates - {selectedDates}
+      {/* Selected Dates - {selectedDates} */}
+      {/* selectedStartDate - {selectedStartDate}
+      <br />
+      selectedEndDate - {selectedEndDate}
+      <br />
+      dateSelectCount - {dateSelectCount} */}
     </div>
   );
 }
