@@ -93,10 +93,6 @@ function Calendar({ dates }: CalendarProps): JSX.Element {
     } else if (dateSelectCount === 1) {
       const startDate = new Date(selectedStartDate);
       setSelectedStopDate(event.currentTarget.value);
-      // const stopDate = new Date(selectedStopDate);
-
-      // console.log('stopDate', selectedStopDate);
-
       // Fun little TS issue I was not aware of about sorting dates
       // checking the valueOf in the sort return argument fixes it
       // https://stackoverflow.com/a/60688789
@@ -117,13 +113,10 @@ function Calendar({ dates }: CalendarProps): JSX.Element {
           ]);
         }
       });
-
       setDateSelectCount(dateSelectCount + 1);
     } else {
+      resetDateAndWeekendRangeState();
       setSelectedStartDate(event.currentTarget.value);
-      setSelectedStopDate('');
-      setWeekdayRange([]);
-      setWeekendRange([]);
       setDateSelectCount(1);
     }
   };

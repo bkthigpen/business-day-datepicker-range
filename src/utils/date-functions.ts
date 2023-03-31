@@ -127,7 +127,6 @@ export const dateDetails = (
 
   if (index >= currObj.days + firstDayWeek) {
     const dateObject = new Date(nextObj.year, nextObj.month, count);
-    // console.log('dateObject', dateObject);
     return {
       date: dateObject,
       isCurrentMonth: false,
