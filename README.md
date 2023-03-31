@@ -10,7 +10,7 @@ The project uses the following technologies
 2. React
 3. TypeScript
 
-This project uses no date libraries or datepickers libraries.
+This project uses no date libraries or datepickers libraries. Everything is built from scratch using native Date objects and custom built React components.
 
 In addition, I've added eslint and prettier for linting and styling rules. I've also used the Airbnb eslint styleguide rules with a few modifications of my own (fixing EOL bug for Windows, etc.). 
 
@@ -33,6 +33,6 @@ below the calendars (Please see the below example).
 
 ### TODO Items
 - [ ] Update the styles
-- [ ] Componentize select dropdowns and other itemsd
+- [ ] Componentize select dropdowns and other items
 - [ ] Break useEffect into a hook
 - [ ] General cleanup
