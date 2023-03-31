@@ -235,7 +235,13 @@ function Calendar({ dates }: CalendarProps): JSX.Element {
         })}
       </div>
       <div className="mt-4 p-4 bg-white shadow-lg overflow-x-scroll">
-        <div>WeekdayRange - {JSON.stringify(weekdayRange)}</div>
+        <div>
+          Weekday Start and Stop -{' '}
+          {JSON.stringify([
+            weekdayRange[0],
+            weekdayRange[weekdayRange.length - 1],
+          ])}
+        </div>
         <div>WeekendRange - {JSON.stringify(weekendRange)}</div>
       </div>
     </div>
