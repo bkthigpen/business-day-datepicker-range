@@ -180,3 +180,7 @@ export const dayOfWeekMap = {
   Friday: 'F',
   Saturday: 'S',
 } as const;
+
+export const buildYears = [...Array(200).keys()].map((yearArg) => {
+  return yearArg + 1900;
+});

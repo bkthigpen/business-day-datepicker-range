@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import {
   buildCalendar,
+  buildYears,
   currentYearMonthDays,
   dateDetails,
   datesInRange,
@@ -103,6 +104,18 @@ function Calendar() {
     }
   };
 
+  const handleOnYearChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    setCalendarYear(parseInt(event.currentTarget.value, 10));
+  };
+
+  const handleOnMonthChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    setCalendarMonth(parseInt(event.currentTarget.value, 10));
+  };
+
   const calendar = buildCalendar(
     maxCalendarRange,
     calendarYearMonthDays.days,
@@ -113,10 +126,14 @@ function Calendar() {
   return (
     <div className="overflow-hidden p-4">
       <DateNav
-        month={monthMap[calendarMonth]}
+        month={calendarMonth}
+        monthDropdown={monthMap}
         onNextClick={handleNextState}
         onPrevClick={handlePrevState}
+        onMonthChange={handleOnMonthChange}
+        onYearChange={handleOnYearChange}
         year={calendarYear}
+        yearDropdown={buildYears}
       />
       <div className="grid grid-cols-7 gap-4 text-center my-4">
         {Object.values(dayOfWeekMap).map((dayOf) => (
