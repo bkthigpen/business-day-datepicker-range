@@ -1,6 +1,8 @@
+# Business Day Datepicker Range
+
 A datepicker component made using Vite, React and TypeScript
 
-Project setup explanation: 
+## Project setup explanation: 
 
 The project uses the following technologies
 
@@ -26,3 +28,9 @@ array of weekend dates within that range as the second element (e.g. [2022-12-03
 - [x] The component should include a prop that allows the user to input predefined ranges,
 such as the last 7 days or last 30 days. These predefined ranges should be displayed
 below the calendars (Please see the below example).
+
+### TODO Items
+- [ ] Update the styles
+- [ ] Componentize select dropdowns and other itemsd
+- [ ] Break useEffect into a hook
+- [ ] General cleanup
