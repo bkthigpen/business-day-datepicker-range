@@ -175,7 +175,7 @@ function Calendar() {
           );
         })}
       </div>
-      <div className="mt-4 p-4 bg-white shadow-lg">
+      <div className="mt-4 p-4 bg-white shadow-lg overflow-x-scroll">
         <div>WeekdayRange - {JSON.stringify(weekdayRange)}</div>
         <div>WeekendRange - {JSON.stringify(weekendRange)}</div>
       </div>
