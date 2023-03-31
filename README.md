@@ -25,6 +25,6 @@ array of weekend dates within that range as the second element (e.g. [2022-12-03
 2022-12-04, 2022-12-10, 2022-12-11]).
 
 ### TODO Column
-- [] The component should include a prop that allows the user to input predefined ranges,
+- [ ] The component should include a prop that allows the user to input predefined ranges,
 such as the last 7 days or last 30 days. These predefined ranges should be displayed
 below the calendars (Please see the below example).
