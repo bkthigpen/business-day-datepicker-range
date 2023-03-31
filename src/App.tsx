@@ -16,11 +16,6 @@ const predefinedDateRanges = [
     stopDate: new Date(new Date().setDate(new Date().getDate() + 7)),
     description: 'Next 7 Days',
   },
-  {
-    startDate: new Date(),
-    stopDate: new Date(new Date().setDate(new Date().getDate() + 30)),
-    description: 'Next 30 Days',
-  },
 ];
 
 function App(): JSX.Element {
